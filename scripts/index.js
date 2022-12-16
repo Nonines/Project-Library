@@ -21,11 +21,38 @@ const myLibrary = [
   },
 ];
 
+// Book object constructor
 function Book(title, author, numOfPages, readStatus) {
   this.title = title;
   this.author = author;
   this.numOfPages = numOfPages;
   this.readStatus = readStatus;
+}
+
+function displayBooks() {
+  const bookList = document.querySelector(".books-container ul");
+  bookList.replaceChildren();
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const book of myLibrary) {
+    const BookItem = document.createElement("li");
+
+    const BookTitle = document.createElement("p");
+    const BookAuthor = document.createElement("p");
+    const BookPages = document.createElement("p");
+    const BookReadStatus = document.createElement("p");
+    BookTitle.textContent = book.title;
+    BookAuthor.textContent = book.author;
+    BookPages.textContent = book.numOfPages;
+    BookReadStatus.textContent = book.readStatus;
+
+    BookItem.appendChild(BookTitle);
+    BookItem.appendChild(BookAuthor);
+    BookItem.appendChild(BookPages);
+    BookItem.appendChild(BookReadStatus);
+
+    bookList.appendChild(BookItem);
+  }
 }
 
 function addBookToLibrary() {
@@ -40,4 +67,7 @@ function addBookToLibrary() {
 
   // store the objects in myLibrary
   myLibrary.push(newBook);
+  displayBooks();
 }
+
+displayBooks();
