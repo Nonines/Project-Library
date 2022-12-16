@@ -1,5 +1,3 @@
-/* eslint-disable no-alert */
-/* eslint-disable no-unused-vars */
 const myLibrary = [
   {
     title: "Blood's A Rover",
@@ -29,11 +27,11 @@ function Book(title, author, numOfPages, readStatus) {
   this.readStatus = readStatus;
 }
 
+// Display all books
 function displayBooks() {
   const bookList = document.querySelector(".books-container ul");
   bookList.replaceChildren();
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const book of myLibrary) {
     const BookItem = document.createElement("li");
 
@@ -55,19 +53,59 @@ function displayBooks() {
   }
 }
 
-function addBookToLibrary() {
-  // collect values from user
-  const title = prompt("Book title?");
-  const author = prompt("Book author?");
-  const pages = prompt("Number of pages?");
-  const read = prompt("Read? (true/false)");
+// Hide and display form
+const newBookContainer = document.querySelector(".new-book-container");
+const newBookForm = document.querySelector(".new-book-container form");
+const newBookBtn = document.getElementById("new-book-btn");
+const newBookCancelBtn = document.getElementById("cancel-btn");
+const newBookSubmitBtn = document.getElementById("submit-btn");
+newBookContainer.removeChild(newBookForm);
 
-  // create new book objects using the values as properties
+newBookBtn.addEventListener("click", () => {
+  newBookContainer.appendChild(newBookForm);
+  newBookContainer.removeChild(newBookBtn);
+});
+
+newBookCancelBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  newBookContainer.removeChild(newBookForm);
+  newBookContainer.appendChild(newBookBtn);
+});
+
+// Store and update user data
+function addBookToLibrary(title, author, pages, read) {
   const newBook = new Book(title, author, pages, read);
-
-  // store the objects in myLibrary
   myLibrary.push(newBook);
   displayBooks();
 }
+
+// Collect and process user data
+newBookSubmitBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  const titleInput = document.getElementById("title");
+  const authorInput = document.getElementById("author");
+  const pagesInput = document.getElementById("pages");
+  const readInput = document.getElementById("read-status");
+
+  if (
+    titleInput.value === "" ||
+    authorInput.value === "" ||
+    pagesInput.value === ""
+  ) {
+    return;
+  }
+
+  addBookToLibrary(
+    titleInput.value,
+    authorInput.value,
+    pagesInput.value,
+    readInput.checked
+  );
+
+  titleInput.value = "";
+  authorInput.value = "";
+  pagesInput.value = "";
+  readInput.checked = false;
+});
 
 displayBooks();

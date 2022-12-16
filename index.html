@@ -12,5 +12,43 @@
       <h1>My books</h1>
       <ul></ul>
     </div>
+
+    <div class="new-book-container">
+      <button id="new-book-btn">New Book</button>
+      <form action="">
+        <h3>Add a new book</h3>
+        <p>
+          <label for="title">Title</label>
+          <input type="text" name="title" id="title" required />
+        </p>
+
+        <p>
+          <label for="author">Author</label>
+          <input type="text" name="author" id="author" required />
+        </p>
+
+        <p>
+          <label for="pages">No. of pages</label>
+          <input type="number" name="pages" id="pages" required min="1" />
+        </p>
+
+        <p>
+          <label for="read-status">Have you read it?</label>
+          <input type="checkbox" name="read-status" id="read-status" />
+        </p>
+
+        <!-- <p>
+          Have you read it?
+          <input type="radio" name="read-status" id="read-no" value="NO" />
+          <label for="read-no">No</label>
+
+          <input type="radio" name="read-status" id="read-yes" value="YES" />
+          <label for="read-yes">Yes</label>
+        </p> -->
+
+        <button id="submit-btn" type="submit">Add book</button>
+        <button id="cancel-btn" type="submit">Cancel</button>
+      </form>
+    </div>
   </body>
 </html>
