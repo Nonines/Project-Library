@@ -1,23 +1,12 @@
-const myLibrary = [
-  {
-    title: "Blood's A Rover",
-    author: "James Elroy",
-    numOfPages: "500",
-    readStatus: "Has been read",
-  },
-  {
-    title: "Mistborn",
-    author: "Brandon Sanderson",
-    numOfPages: "400",
-    readStatus: "Has been read",
-  },
-  {
-    title: "Harry Potter",
-    author: "J. K. Rowling",
-    numOfPages: "250",
-    readStatus: "Has not been read",
-  },
-];
+const myLibrary = [];
+
+const bookList = document.querySelector(".books-container ul");
+const newBookContainer = document.querySelector(".new-book-container");
+const newBookForm = document.querySelector(".new-book-container form");
+const newBookBtn = document.getElementById("new-book-btn");
+const newBookCancelBtn = document.getElementById("cancel-btn");
+const newBookSubmitBtn = document.getElementById("submit-btn");
+newBookContainer.removeChild(newBookForm);
 
 // Book object constructor
 function Book(title, author, numOfPages, readStatus) {
@@ -27,9 +16,16 @@ function Book(title, author, numOfPages, readStatus) {
   this.readStatus = readStatus;
 }
 
+Book.prototype.changeStatus = function () {
+  if (this.readStatus === "Has been read") {
+    this.readStatus = "Has not been read";
+  } else {
+    this.readStatus = "Has been read";
+  }
+};
+
 // Display all books
 function displayBooks() {
-  const bookList = document.querySelector(".books-container ul");
   bookList.replaceChildren();
 
   // Loops through each 'book' object in the array and appends them to the HTML, as well as adding an on-click event listener for the 'remove' button
@@ -48,6 +44,15 @@ function displayBooks() {
       }
     });
 
+    // Button for changing read status
+    const changeStatusBtn = document.createElement("button");
+    changeStatusBtn.textContent = "Change read status";
+    changeStatusBtn.className = "change-status";
+    changeStatusBtn.addEventListener("click", () => {
+      book.changeStatus();
+      displayBooks();
+    });
+
     // Elements to display 'book' content
     const BookTitle = document.createElement("p");
     const BookAuthor = document.createElement("p");
@@ -64,6 +69,7 @@ function displayBooks() {
     BookItem.appendChild(BookPages);
     BookItem.appendChild(BookReadStatus);
     BookItem.appendChild(removeBtn);
+    BookItem.appendChild(changeStatusBtn);
 
     // Finally append the new book item to the list of books in the html
     bookList.appendChild(BookItem);
@@ -76,13 +82,6 @@ function addBookToLibrary(title, author, pages, read) {
   myLibrary.push(newBook);
   displayBooks();
 }
-
-const newBookContainer = document.querySelector(".new-book-container");
-const newBookForm = document.querySelector(".new-book-container form");
-const newBookBtn = document.getElementById("new-book-btn");
-const newBookCancelBtn = document.getElementById("cancel-btn");
-const newBookSubmitBtn = document.getElementById("submit-btn");
-newBookContainer.removeChild(newBookForm);
 
 // Display form and remove buton on click
 newBookBtn.addEventListener("click", () => {
@@ -132,5 +131,3 @@ newBookSubmitBtn.addEventListener("click", (e) => {
   pagesInput.value = "";
   readStatusInput.checked = false;
 });
-
-displayBooks(); // Updates pre-saved content unto the html
