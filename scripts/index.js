@@ -68,8 +68,8 @@ function displayBooks() {
     BookItem.appendChild(BookAuthor);
     BookItem.appendChild(BookPages);
     BookItem.appendChild(BookReadStatus);
-    BookItem.appendChild(removeBtn);
     BookItem.appendChild(changeStatusBtn);
+    BookItem.appendChild(removeBtn);
 
     // Finally append the new book item to the list of books in the html
     bookList.appendChild(BookItem);
@@ -131,3 +131,24 @@ newBookSubmitBtn.addEventListener("click", (e) => {
   pagesInput.value = "";
   readStatusInput.checked = false;
 });
+
+const mistborn = new Book(
+  "Mistborn",
+  "Brandon Sanderson",
+  400,
+  "Has been read"
+);
+const stormlight = new Book(
+  "The Stormlight Archive",
+  "Brandon Sanderson",
+  1200,
+  "Has been read"
+);
+const alloyOfLaw = new Book(
+  "Alloy of Law",
+  "Some popular guy",
+  45,
+  "Has been read"
+);
+myLibrary.push(mistborn, stormlight, alloyOfLaw);
+displayBooks();

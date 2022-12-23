@@ -1,4 +1,116 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
 body {
+  min-height: 100vh;
+  height: auto;
+  width: 100%;
+  padding: 20px;
+
   background-color: rgb(35, 46, 68);
   color: rgb(255, 255, 255);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.books-container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.books-container ul {
+  width: 100%;
+  list-style: none;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-auto-rows: 230px;
+  gap: 20px;
+}
+
+.books-container ul li {
+  background-color: rgb(255, 255, 255);
+  color: rgb(35, 46, 68);
+  font-size: 25px;
+  border-radius: 12px;
+  padding: 10px;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.books-container ul li :first-child {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+:is(.books-container ul li, .new-book-container form) > button {
+  display: block;
+  height: 30px;
+  width: max-content;
+  padding: 5px;
+  margin: 5px 0px;
+  border: 0;
+  border-radius: 6px;
+  color: rgb(255, 255, 255);
+}
+
+:is(.books-container ul li, .new-book-container form) > button:first-of-type {
+  background-color: rgb(35, 46, 68);
+}
+
+:is(.books-container ul li, .new-book-container form) > button:last-of-type {
+  background-color: rgb(220, 20, 60);
+}
+
+.new-book-container {
+  width: 100%;
+}
+
+.new-book-container > button {
+  display: block;
+  width: 100%;
+  height: 40px;
+  border-radius: 12px;
+  border: 0;
+  background-color: rgb(255, 255, 255);
+  color: rgb(35, 46, 68);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.new-book-container > form {
+  width: 100%;
+  height: 300px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(35, 46, 68);
+  border-radius: 12px;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.new-book-container > form p {
+  display: flex;
+  justify-content: space-between;
+
+  width: min(100%, 300px);
+  height: 30px;
 }
