@@ -30,7 +30,7 @@ body {
   gap: 20px;
 }
 
-.books-container ul {
+#book-list {
   width: 100%;
   list-style: none;
 
@@ -40,7 +40,7 @@ body {
   gap: 20px;
 }
 
-.books-container ul li {
+#book-list li {
   background-color: rgb(255, 255, 255);
   color: rgb(35, 46, 68);
   font-size: 25px;
@@ -53,12 +53,12 @@ body {
   justify-content: center;
 }
 
-.books-container ul li :first-child {
+#book-list li :first-child {
   font-size: 30px;
   font-weight: 700;
 }
 
-:is(.books-container ul li, .new-book-container form) > button {
+:is(#book-list li, .new-book-container form) > button {
   display: block;
   height: 30px;
   width: max-content;
@@ -69,11 +69,11 @@ body {
   color: rgb(255, 255, 255);
 }
 
-:is(.books-container ul li, .new-book-container form) > button:first-of-type {
+:is(#book-list li, .new-book-container form) > button:first-of-type {
   background-color: rgb(35, 46, 68);
 }
 
-:is(.books-container ul li, .new-book-container form) > button:last-of-type {
+:is(#book-list li, .new-book-container form) > button:last-of-type {
   background-color: rgb(220, 20, 60);
 }
 

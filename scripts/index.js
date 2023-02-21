@@ -1,13 +1,3 @@
-const myLibrary = [];
-
-const bookList = document.querySelector(".books-container ul");
-const newBookContainer = document.querySelector(".new-book-container");
-const newBookForm = document.querySelector(".new-book-container form");
-const newBookBtn = document.getElementById("new-book-btn");
-const newBookCancelBtn = document.getElementById("cancel-btn");
-const newBookSubmitBtn = document.getElementById("submit-btn");
-newBookContainer.removeChild(newBookForm);
-
 // Book object constructor
 function Book(title, author, numOfPages, readStatus) {
   this.title = title;
@@ -16,7 +6,7 @@ function Book(title, author, numOfPages, readStatus) {
   this.readStatus = readStatus;
 }
 
-Book.prototype.changeStatus = function () {
+Book.prototype.changeStatus = function changeStatus() {
   if (this.readStatus === "Has been read") {
     this.readStatus = "Has not been read";
   } else {
@@ -24,64 +14,16 @@ Book.prototype.changeStatus = function () {
   }
 };
 
-// Display all books
-function displayBooks() {
-  bookList.replaceChildren();
+const myLibrary = [];
 
-  // Loops through each 'book' object in the array and appends them to the HTML, as well as adding an on-click event listener for the 'remove' button
-  for (const book of myLibrary) {
-    const BookItem = document.createElement("li");
-    BookItem.setAttribute("data-library-index", myLibrary.indexOf(book));
-
-    // Button for removing books
-    const removeBtn = document.createElement("button");
-    removeBtn.textContent = "Remove";
-    removeBtn.className = "remove-book";
-    removeBtn.addEventListener("click", () => {
-      if (confirm("Are you certain you want to remove this book?")) {
-        myLibrary.splice(BookItem.getAttribute("data-library-index"), 1);
-        displayBooks();
-      }
-    });
-
-    // Button for changing read status
-    const changeStatusBtn = document.createElement("button");
-    changeStatusBtn.textContent = "Change read status";
-    changeStatusBtn.className = "change-status";
-    changeStatusBtn.addEventListener("click", () => {
-      book.changeStatus();
-      displayBooks();
-    });
-
-    // Elements to display 'book' content
-    const BookTitle = document.createElement("p");
-    const BookAuthor = document.createElement("p");
-    const BookPages = document.createElement("p");
-    const BookReadStatus = document.createElement("p");
-
-    BookTitle.textContent = book.title;
-    BookAuthor.textContent = book.author;
-    BookPages.textContent = book.numOfPages;
-    BookReadStatus.textContent = book.readStatus;
-
-    BookItem.appendChild(BookTitle);
-    BookItem.appendChild(BookAuthor);
-    BookItem.appendChild(BookPages);
-    BookItem.appendChild(BookReadStatus);
-    BookItem.appendChild(changeStatusBtn);
-    BookItem.appendChild(removeBtn);
-
-    // Finally append the new book item to the list of books in the html
-    bookList.appendChild(BookItem);
-  }
-}
-
-// Store and update user data by creating new book objects and storing them in an array
-function addBookToLibrary(title, author, pages, read) {
-  const newBook = new Book(title, author, pages, read);
-  myLibrary.push(newBook);
-  displayBooks();
-}
+// HTML elements
+const bookList = document.getElementById("book-list");
+const newBookContainer = document.querySelector(".new-book-container");
+const newBookForm = document.querySelector(".new-book-container form");
+const newBookBtn = document.getElementById("new-book-btn");
+const newBookCancelBtn = document.getElementById("cancel-btn");
+const newBookSubmitBtn = document.getElementById("submit-btn");
+newBookContainer.removeChild(newBookForm);
 
 // Display form and remove buton on click
 newBookBtn.addEventListener("click", () => {
@@ -96,13 +38,84 @@ newBookCancelBtn.addEventListener("click", (e) => {
   newBookContainer.appendChild(newBookBtn);
 });
 
-// Collect and process user data
+// Reusable func for creating the 'li' elements to display library content
+function createBookElements(bookObject) {
+  const BookItem = document.createElement("li");
+  BookItem.setAttribute("data-library-index", myLibrary.indexOf(bookObject));
+
+  // Child elements to display 'bookObject' content
+  const BookTitle = document.createElement("p");
+  const BookAuthor = document.createElement("p");
+  const BookPages = document.createElement("p");
+  const BookReadStatus = document.createElement("p");
+  BookTitle.textContent = bookObject.title;
+  BookAuthor.textContent = bookObject.author;
+  BookPages.textContent = bookObject.numOfPages;
+  BookReadStatus.textContent = bookObject.readStatus;
+
+  // Button for removing books
+  const removeBtn = document.createElement("button");
+  removeBtn.textContent = "Remove";
+
+  removeBtn.addEventListener("click", () => {
+    if (confirm("Are you certain you want to remove this book?")) {
+      // change value in myLibrary
+      myLibrary.splice(BookItem.getAttribute("data-library-index"), 1);
+
+      // change value on display
+      bookList.removeChild(BookItem);
+
+      // update library index attribute
+      for (let i = 0; i < myLibrary.length; i += 1) {
+        bookList.childNodes[i].setAttribute("data-library-index", i);
+      }
+    }
+  });
+
+  // Button for changing read status
+  const changeStatusBtn = document.createElement("button");
+  changeStatusBtn.textContent = "Change read status";
+
+  changeStatusBtn.addEventListener("click", () => {
+    bookObject.changeStatus(); // change value in myLibrary
+    BookReadStatus.textContent = bookObject.readStatus; // change value on display
+  });
+
+  // Append child elements to li element
+  BookItem.appendChild(BookTitle);
+  BookItem.appendChild(BookAuthor);
+  BookItem.appendChild(BookPages);
+  BookItem.appendChild(BookReadStatus);
+  BookItem.appendChild(changeStatusBtn);
+  BookItem.appendChild(removeBtn);
+
+  // Finally return the new book li element
+  return BookItem;
+}
+
+// Update user data on front and backend
+function addBookToLibrary(title, author, pages, read) {
+  const newBook = new Book(title, author, pages, read);
+  myLibrary.push(newBook);
+  const bookElement = createBookElements(newBook);
+  bookList.appendChild(bookElement);
+}
+
+// Collect data and process book submission
 newBookSubmitBtn.addEventListener("click", (e) => {
   e.preventDefault();
+
   const titleInput = document.getElementById("title");
   const authorInput = document.getElementById("author");
   const pagesInput = document.getElementById("pages");
   const readStatusInput = document.getElementById("read-status");
+
+  let readStatus;
+  if (readStatusInput.checked === true) {
+    readStatus = "Has been read";
+  } else {
+    readStatus = "Has not been read";
+  }
 
   if (
     titleInput.value === "" ||
@@ -110,13 +123,6 @@ newBookSubmitBtn.addEventListener("click", (e) => {
     pagesInput.value === ""
   ) {
     return;
-  }
-
-  let readStatus;
-  if (readStatusInput.checked === true) {
-    readStatus = "Has been read";
-  } else {
-    readStatus = "Has not been read";
   }
 
   addBookToLibrary(
@@ -132,23 +138,33 @@ newBookSubmitBtn.addEventListener("click", (e) => {
   readStatusInput.checked = false;
 });
 
-const mistborn = new Book(
-  "Mistborn",
-  "Brandon Sanderson",
-  400,
-  "Has been read"
-);
-const stormlight = new Book(
-  "The Stormlight Archive",
-  "Brandon Sanderson",
-  1200,
-  "Has been read"
-);
-const alloyOfLaw = new Book(
-  "Alloy of Law",
-  "Some popular guy",
-  45,
-  "Has been read"
-);
-myLibrary.push(mistborn, stormlight, alloyOfLaw);
-displayBooks();
+// // Display all books if any was saved prior
+// function displayBooks() {
+//   for (let i = 0; i < myLibrary.length; i += 1) {
+//     const bookElement = createBookElements(myLibrary[i]);
+//     bookList.appendChild(bookElement);
+//   }
+// }
+
+// // Sample data
+// const mistborn = new Book(
+//   "Mistborn",
+//   "Brandon Sanderson",
+//   400,
+//   "Has been read"
+// );
+// const stormlight = new Book(
+//   "The Stormlight Archive",
+//   "Brandon Sanderson",
+//   1200,
+//   "Has been read"
+// );
+// const alloyOfLaw = new Book(
+//   "Alloy of Law",
+//   "Some popular guy",
+//   45,
+//   "Has been read"
+// );
+// myLibrary.push(mistborn, stormlight, alloyOfLaw);
+
+// displayBooks();
